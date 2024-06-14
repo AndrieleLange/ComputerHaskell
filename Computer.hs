@@ -20,9 +20,8 @@ salvaMemoria end cont memoria = (end, cont)
 
 -- ler em memoria 
 lerMemoria :: Int -> ListMemoria -> Int
-lerMemoria endereco memoria = case lookup endereco memoria of 
-    Just valor -> valor
---    Nothing -> error "Endereço de memória não encontrado"
+lerMemoria endereco memoria = 
+    -- procurar endereço da memória
 
 data Instrucao = 
      LOD Int
@@ -50,3 +49,7 @@ lod  val1 val2 =
 -- poderão ser informados em 
 -- decimal, desde que respeitados o tamanho máximo de bits correspondentes 
 -- ao valor binário associado.
+
+
+
+
