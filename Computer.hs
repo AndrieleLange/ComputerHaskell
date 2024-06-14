@@ -19,12 +19,16 @@ salvaMemoria end cont memoria = (end, cont)
      memoria : ListMemoria
 
 -- ler em memoria 
+-- procura o endereço na memoria e retorna o conteudo 
 lerMemoria :: Int -> ListMemoria -> Int
-lerMemoria endereco memoria = 
+lerMemoria endereco lista 
+     lista (x:xs) = if fst x == endereco
+                        then snd x
+                        else lerMemoria endereco xs
     -- procurar endereço da memória
 
 data Instrucao = 
-     LOD Int
+    | LOD Int
     | STO Int
     | JMP Int
     | JMZ Int
@@ -33,11 +37,12 @@ data Instrucao =
     | SUB Int
     | NOP
     | HLT 
+deriving (Show)
 
 -- assembler instruções
 assembler :: int -> int -> int -> Memoria
 assembler val1 instrucao val2 
-        | 
+        
 
 
 lod :: int -> int -> Memoria
