@@ -12,8 +12,23 @@ type ListMemoria = [Memoria] -- lista de memorias
 
 -- Salvar na memoria
 salvaMemoria :: Int -> Int -> ListMemoria -> ListMemoria
-salvaMemoria end cont ListMemoria = (end, cont) : ListMemoria
+salvaMemoria end cont memoria = (end, cont) 
+    | memoria : ListMemoria
 
+-- ler em memoria 
+lerMemoria :: Int -> ListMemoria -> Int
+lerMemoria endereco memoria = map ()
+
+data Instrucao = 
+    NOP
+    | LOD Int
+    | STO Int
+    | JMP Int
+    | JMZ Int
+    | CPE Int
+    | ADD Int
+    | SUB Int
+    | HLT 
 
 -- assembler instruções
 assembler :: int -> int -> int -> Memoria
@@ -21,6 +36,8 @@ assembler val1 instrucao val2
         | 
 
 
+lod :: int -> int -> Memoria
+lod  val1 val2 = 
 
 
 
