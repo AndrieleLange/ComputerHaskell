@@ -10,24 +10,29 @@ type Memoria = (Int, Int) -- endereço de memória, conteúdo
 
 type ListMemoria = [Memoria] -- lista de memorias
 
+-- iniciaMem :: ListMemoria
+-- iniciaMem [(endereco, 0)| endereco <- [0 .. 255]]
+
 -- Salvar na memoria
 salvaMemoria :: Int -> Int -> ListMemoria -> ListMemoria
 salvaMemoria end cont memoria = (end, cont) 
-    | memoria : ListMemoria
+     memoria : ListMemoria
 
 -- ler em memoria 
 lerMemoria :: Int -> ListMemoria -> Int
-lerMemoria endereco memoria = map ()
+lerMemoria endereco memoria = case lookup endereco memoria of 
+    Just valor -> valor
+--    Nothing -> error "Endereço de memória não encontrado"
 
 data Instrucao = 
-    NOP
-    | LOD Int
+     LOD Int
     | STO Int
     | JMP Int
     | JMZ Int
     | CPE Int
     | ADD Int
     | SUB Int
+    | NOP
     | HLT 
 
 -- assembler instruções
