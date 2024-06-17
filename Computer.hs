@@ -1,7 +1,4 @@
---  A memória poderá ser representada em Haskell por uma lista de tuplas. 
--- Cada tupla é formada por dois inteiros, 
--- onde o primeiro representa o endereço de memória e o segundo o conteúdo 
--- daquela posição de memória. 
+
 -- Desta forma pode-se inserir na lista informada por parâmetro apenas os 
 -- endereços que serão trabalhados 
 -- durante a simulação.
@@ -10,38 +7,54 @@ type Memoria = (Int, Int) -- endereço de memória, conteúdo
 
 type ListMemoria = [Memoria] -- lista de memorias
 
--- iniciaMem :: ListMemoria
--- iniciaMem [(endereco, 0)| endereco <- [0 .. 255]]
+-- cria memoria
+memoria :: Int -> Int -> Memoria
+memoria end cont = (end, cont)
+        salvaMemoria (end, cont)
+
 
 -- Salvar na memoria
-salvaMemoria :: Int -> Int -> ListMemoria -> ListMemoria
-salvaMemoria end cont memoria = (end, cont) 
-     memoria : ListMemoria
+salvaMemoria :: Memoria -> ListMemoria
+salvaMemoria memoria  =  memoria : ListMemoria
 
 -- ler em memoria 
 -- procura o endereço na memoria e retorna o conteudo 
 lerMemoria :: Int -> ListMemoria -> Int
 lerMemoria endereco lista 
-     lista (x:xs) = if fst x == endereco
-                        then snd x
-                        else lerMemoria endereco xs
-    -- procurar endereço da memória
+     lista ((e,c):xs) 
+        | e == endereco     = c
+        | otherwise         = lerMemoria endereco xs
 
+
+-- Atualizar conteúdo na memória
+atualizaMemoria :: Int -> Int -> ListMemoria -> ListMemoria
+atualizaMemoria _ _ [] = salvaMemoria endereco cont ((e, c):xs)  -- Se a memória estiver vazia, salva
+atualizaMemoria endereco cont ((e, c):xs)
+    | endereco == e     = (e, cont) : xs  -- Atualiza o valor se o endereço for encontrado
+    | otherwise         = atualizaMemoria endereco cont xs  -- Continua procurando
+
+
+
+-- Int = endereço de memoria
 data Instrucao = 
-    | LOD Int
-    | STO Int
-    | JMP Int
-    | JMZ Int
-    | CPE Int
-    | ADD Int
-    | SUB Int
-    | NOP
-    | HLT 
+    | LOD Int  -- carrega para o acc
+    | STO Int   -- carrega do acc para a variavel
+    | JMP Int   -- pular para o endereço de memória pedido
+    | JMZ Int   -- só pula se acc = 0
+    | CPE Int   -- se o valor == acc, acc = 0, acc = 1
+    | ADD Int   -- acc = valor + acc 
+    | SUB Int   -- acc = valor - acc 
+    | NOP       -- No operation
+    | HLT       -- encerra processador
 deriving (Show)
+
+
+
 
 -- assembler instruções
 assembler :: int -> int -> int -> Memoria
 assembler val1 instrucao val2 
+
         
 
 
