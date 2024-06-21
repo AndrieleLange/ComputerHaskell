@@ -83,4 +83,18 @@ assembler (HLT) =
 
 
 
+-- Executar um programa
+-- recebe uma memória e devolve uma memória
+executar :: [(Int, Int)] -> [(Int, Int)]
+-- ler o arquivo e devolver a lista
+-- ciclo busca, decodifica e executa
+-- faz até encontrar o NOP
+-- criar uma função de cada instrução
+
+
+-- instrução NOP
+-- execNOP(mem,acc,eqz) = (mem,acc,eqz)
+
+execNOP :: ([(Int, Int)], Int, Int) -> ([(Int, Int)], Int, Int) 
+execNOP (mem,acc,eqz) = id -- provavelmente incompleto
 
