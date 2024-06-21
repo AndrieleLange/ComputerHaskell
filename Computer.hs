@@ -41,7 +41,6 @@ atualizaMemoria endereco cont ((e, c):xs)
     | otherwise         = atualizaMemoria endereco cont xs  -- Continua procurando
 
 
-
 -- Int = endereço de memoria
 data Instrucao = 
     | LOD Int  -- carrega para o acc
@@ -55,18 +54,25 @@ data Instrucao =
     | HLT       -- encerra processador
 deriving (Show)
 
+assembler :: Instrucao -> 
+assembler (LOD n) = 
+assembler (STO n) =
+assembler (JMP n) =
+assembler (JMZ n) =
+assembler (CPE n) =
+assembler (ADD n) =
+assembler (SUB n) =
+assembler (NOP) =
+assembler (HLT) =
 
 
 
--- assembler instruções
-assembler :: int -> int -> int -> Memoria
-assembler val1 instrucao val2 
+-- -- assembler instruções
+-- assembler :: int -> int -> int -> Memoria
+-- assembler val1 instrucao val2 
 
         
 
-
-lod :: int -> int -> Memoria
-lod  val1 val2 = 
 
 
 
