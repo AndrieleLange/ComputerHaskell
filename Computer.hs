@@ -3,6 +3,9 @@
 -- endereços que serão trabalhados 
 -- durante a simulação.
 
+-- O programa começa no 0
+
+
 type ListMemoria = [(Int, Int) ] -- lista de memorias
 
 data CPU = CPU { acc :: Int, pc :: Int, memoria :: ListMemoria } deriving (Show)
@@ -42,28 +45,28 @@ atualizaMemoria endereco cont ((e, c):xs)
 
 
 -- Int = endereço de memoria
-data Instrucao = 
-    | LOD Int  -- carrega para o acc
-    | STO Int   -- carrega do acc para a variavel
-    | JMP Int   -- pular para o endereço de memória pedido
-    | JMZ Int   -- só pula se acc = 0
-    | CPE Int   -- se o valor == acc, acc = 0, acc = 1
-    | ADD Int   -- acc = valor + acc 
-    | SUB Int   -- acc = valor - acc 
-    | NOP       -- No operation
-    | HLT       -- encerra processador
-deriving (Show)
+-- data Instrucao = 
+--     | LOD Int  -- carrega para o acc
+--     | STO Int   -- carrega do acc para a variavel
+--     | JMP Int   -- pular para o endereço de memória pedido
+--     | JMZ Int   -- só pula se acc = 0
+--     | CPE Int   -- se o valor == acc, acc = 0, acc = 1
+--     | ADD Int   -- acc = valor + acc 
+--     | SUB Int   -- acc = valor - acc 
+--     | NOP       -- No operation
+--     | HLT       -- encerra processador
+-- deriving (Show)
 
-assembler :: Instrucao -> 
-assembler (LOD n) = 
-assembler (STO n) =
-assembler (JMP n) =
-assembler (JMZ n) =
-assembler (CPE n) =
-assembler (ADD n) =
-assembler (SUB n) =
-assembler (NOP) =
-assembler (HLT) =
+-- assembler :: Instrucao -> 
+-- assembler (LOD n) = 
+-- assembler (STO n) =
+-- assembler (JMP n) =
+-- assembler (JMZ n) =
+-- assembler (CPE n) =
+-- assembler (ADD n) =
+-- assembler (SUB n) =
+-- assembler (NOP) =
+-- assembler (HLT) =
 
 
 
@@ -90,6 +93,12 @@ executar :: [(Int, Int)] -> [(Int, Int)]
 -- ciclo busca, decodifica e executa
 -- faz até encontrar o NOP
 -- criar uma função de cada instrução
+
+-- instrução LOD
+-- execLOD (endereço, memória, acc, eqz) -> (endereço, memória, acc, eqz)
+execLOD :: Int -> ([(Int, Int)], Int, Int) -> ([(Int, Int)], Int, Int)
+execLOD end (mem,acc,eqz) = (mem,readMem mem end,eqz)
+
 
 
 -- instrução NOP
