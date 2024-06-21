@@ -7,6 +7,13 @@ type Memoria = (Int, Int) -- endereço de memória, conteúdo
 
 type ListMemoria = [Memoria] -- lista de memorias
 
+data CPU = CPU { acc :: Int, pc :: Int, memoria :: ListMemoria } deriving (Show)
+
+-- Cria CPU
+criaCPU :: Int -> Int -> ListMemoria -> CPU
+criaCPU acc pc memoria = CPU { acc = acc, pc = pc, memoria = memoria }
+
+
 -- cria memoria
 memoria :: Int -> Int -> Memoria
 memoria end cont = (end, cont)
