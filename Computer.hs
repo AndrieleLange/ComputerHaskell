@@ -3,9 +3,7 @@
 -- endereços que serão trabalhados 
 -- durante a simulação.
 
-type Memoria = (Int, Int) -- endereço de memória, conteúdo
-
-type ListMemoria = [Memoria] -- lista de memorias
+type ListMemoria = [(Int, Int) ] -- lista de memorias
 
 data CPU = CPU { acc :: Int, pc :: Int, memoria :: ListMemoria } deriving (Show)
 
@@ -14,23 +12,25 @@ criaCPU :: Int -> Int -> ListMemoria -> CPU
 criaCPU acc pc memoria = CPU { acc = acc, pc = pc, memoria = memoria }
 
 
--- cria memoria
-memoria :: Int -> Int -> Memoria
-memoria end cont = (end, cont)
-        salvaMemoria (end, cont)
-
-
+-- Escrever na memória
+-- Armazenar o conteúdo em um endereço de memória
+-- writeMem(memoria,endereço,conteudo)=memoria
+-- Exemplo:
+-- wirteMem [(0,10),(1,3),(2,23),(10,100)] 1 6 = [(0,10),(1,6),(2,23),(10,100)]
 -- Salvar na memoria
-salvaMemoria :: Memoria -> ListMemoria
-salvaMemoria memoria  =  memoria : ListMemoria
+salvaMemoria :: ListMemoria -> Int -> Int -> ListMemoria
+salvaMemoria memoria  =  (e, c) : ListMemoria
 
--- ler em memoria 
--- procura o endereço na memoria e retorna o conteudo 
-lerMemoria :: Int -> ListMemoria -> Int
-lerMemoria endereco lista 
-     lista ((e,c):xs) 
-        | e == endereco     = c
-        | otherwise         = lerMemoria endereco xs
+
+-- Ler a memória
+-- Retornar o conteúdo do endereço de memória
+-- readMem(memoria,endereco)=conteudo
+-- Exemplo:
+-- readMem [(0,10),(1,3),(2,23),(10,100)] 1 = 3
+readMem :: [(Int,Int)] -> Int -> Int
+readMem (x:xs) e
+    | e == fst x = snd x
+    | e /= fst x = readMem xs e
 
 
 -- Atualizar conteúdo na memória
