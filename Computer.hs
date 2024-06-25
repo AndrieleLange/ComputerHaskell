@@ -107,3 +107,11 @@ execLOD end (mem,acc,eqz) = (mem,readMem mem end,eqz)
 execNOP :: ([(Int, Int)], Int, Int) -> ([(Int, Int)], Int, Int) 
 execNOP (mem,acc,eqz) = id -- provavelmente incompleto
 
+
+-- instrução CPE
+-- execCPE (endereço, memória, acc, eqz) -> (endereço, memória, acc, eqz)
+execCPE :: Int -> (ListMemoria, Int, Int) -> (ListMemoria, Int, Int)
+execCPE end (mem, acc, eqz) =
+    if readMem mem end == acc
+    then (mem, 0, eqz)
+    else (mem, 1, eqz)
