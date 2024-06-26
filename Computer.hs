@@ -1,12 +1,5 @@
-
--- Desta forma pode-se inserir na lista informada por parâmetro apenas os 
--- endereços que serão trabalhados 
--- durante a simulação.
-
 -- O programa começa no 0
-
-
-type ListMemoria = [(Int, Int) ] -- lista de memorias
+type ListMemoria = [(Int, Int)] -- lista de memorias
 
 data CPU = CPU { acc :: Int, pc :: Int, memoria :: ListMemoria } deriving (Show)
 
@@ -30,7 +23,7 @@ salvaMemoria memoria  =  (e, c) : ListMemoria
 -- readMem(memoria,endereco)=conteudo
 -- Exemplo:
 -- readMem [(0,10),(1,3),(2,23),(10,100)] 1 = 3
-readMem :: [(Int,Int)] -> Int -> Int
+readMem :: ListMemoria -> Int -> Int
 readMem (x:xs) e
     | e == fst x = snd x
     | e /= fst x = readMem xs e
@@ -43,41 +36,7 @@ atualizaMemoria endereco cont ((e, c):xs)
     | endereco == e     = (e, cont) : xs  -- Atualiza o valor se o endereço for encontrado
     | otherwise         = atualizaMemoria endereco cont xs  -- Continua procurando
 
-
--- Int = endereço de memoria
--- data Instrucao = 
---     | LOD Int  -- carrega para o acc
---     | STO Int   -- carrega do acc para a variavel
---     | JMP Int   -- pular para o endereço de memória pedido
---     | JMZ Int   -- só pula se acc = 0
---     | CPE Int   -- se o valor == acc, acc = 0, acc = 1
---     | ADD Int   -- acc = valor + acc 
---     | SUB Int   -- acc = valor - acc 
---     | NOP       -- No operation
---     | HLT       -- encerra processador
--- deriving (Show)
-
--- assembler :: Instrucao -> 
--- assembler (LOD n) = 
--- assembler (STO n) =
--- assembler (JMP n) =
--- assembler (JMZ n) =
--- assembler (CPE n) =
--- assembler (ADD n) =
--- assembler (SUB n) =
--- assembler (NOP) =
--- assembler (HLT) =
-
-
-
--- -- assembler instruções
--- assembler :: int -> int -> int -> Memoria
--- assembler val1 instrucao val2 
-
-        
-
-
-
+    
 
 -- Tanto os códigos de instrução como o conteúdo dos endereços de memória 
 -- poderão ser informados em 
@@ -88,7 +47,7 @@ atualizaMemoria endereco cont ((e, c):xs)
 
 -- Executar um programa
 -- recebe uma memória e devolve uma memória
-executar :: [(Int, Int)] -> [(Int, Int)]
+executar :: ListMememoria -> ListMememoria
 -- ler o arquivo e devolver a lista
 -- ciclo busca, decodifica e executa
 -- faz até encontrar o NOP
@@ -96,17 +55,28 @@ executar :: [(Int, Int)] -> [(Int, Int)]
 
 -- instrução LOD
 -- execLOD (endereço, memória, acc, eqz) -> (endereço, memória, acc, eqz)
-execLOD :: Int -> ([(Int, Int)], Int, Int) -> ([(Int, Int)], Int, Int)
+execLOD :: Int -> (ListMemoria, Int, Int) -> (ListMemoria, Int, Int)
 execLOD end (mem,acc,eqz) = (mem,readMem mem end,eqz)
 
+-- instrução STO
+-- execSTO end (ListMemoria, acc, eqz) -> (ListMemoria, acc, eqz)
+execSTO :: Int -> (ListMememoria, Int, Int) -> (ListMemoria, Int, Int)
+execSTO end (mem, acc, eqz) = (atualizaMemoria end acc mem, acc, eqz)
 
+-- Instrução JMP
 
--- instrução NOP
--- execNOP(mem,acc,eqz) = (mem,acc,eqz)
+-- instrução JMZ
 
-execNOP :: ([(Int, Int)], Int, Int) -> ([(Int, Int)], Int, Int) 
-execNOP (mem,acc,eqz) = id -- provavelmente incompleto
+-- Instrução ADD
+execADD :: Int -> (ListMememoria, Int, Int) -> (ListMemoria, Int, Int)
+execADD end (mem,acc,eqz) = (mem, newAcc, eqz)
+    where 
+        val = readMem mem end
+        newAcc = val + acc
 
+-- instrução SUB
+
+-- Instrução HLT
 
 -- instrução CPE
 -- execCPE (endereço, memória, acc, eqz) -> (endereço, memória, acc, eqz)
@@ -115,3 +85,9 @@ execCPE end (mem, acc, eqz) =
     if readMem mem end == acc
     then (mem, 0, eqz)
     else (mem, 1, eqz)
+
+
+-- instrução NOP
+-- execNOP(mem,acc,eqz) = (mem,acc,eqz)
+execNOP :: (ListMemoria, Int, Int) -> (ListMemoria, Int, Int) 
+execNOP (mem,acc,eqz) = id -- provavelmente incompleto
