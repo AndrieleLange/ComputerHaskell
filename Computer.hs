@@ -75,6 +75,12 @@ execADD end (mem,acc,eqz) = (mem, newAcc, eqz)
         newAcc = val + acc
 
 -- instrução SUB
+execSUB :: Int -> (ListMememoria, Int, Int) -> (ListMemoria, Int, Int)
+execSUB end (mem,acc,eqz) = (mem, newAcc, eqz)
+    where 
+        val = readMem mem end
+        newAcc = val - acc
+
 
 -- Instrução HLT
 
