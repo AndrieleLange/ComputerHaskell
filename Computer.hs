@@ -5,7 +5,7 @@ data CPU = CPU { acc :: Int, pc :: Int, memoria :: ListMemoria } deriving (Show)
 
 -- Cria CPU
 criaCPU :: Int -> Int -> ListMemoria -> CPU
-criaCPU acc pc memoria = CPU { acc = acc, pc = pc, memoria = memoria }
+criaCPU acc pc memoria = CPU { acc = acc, pc = pc, memoria = memoria, eqz = eqz }
 
 
 -- Escrever na memória
@@ -68,6 +68,11 @@ execSTO end (mem, acc, eqz) = (atualizaMemoria end acc mem, acc, eqz)
 -- Instrução JMP
 execJMP Int -> (ListMememoria, Int, Int) -> (ListMemoria, Int, Int)
 execJMP end (mem, acc, eqz) = 
+    pc = readMem end mem 
+
+
+
+
 -- instrução JMZ
 
 -- Instrução ADD
