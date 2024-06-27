@@ -105,3 +105,4 @@ execCPE end (mem, acc, eqz) =
 -- execNOP(mem,acc,eqz) = (mem,acc,eqz)
 execNOP :: (ListMemoria, Int, Int) -> (ListMemoria, Int, Int) 
 execNOP (mem,acc,eqz) = id -- provavelmente incompleto
+
