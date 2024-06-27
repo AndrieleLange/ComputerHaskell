@@ -48,6 +48,8 @@ atualizaMemoria endereco cont ((e, c):xs)
 -- Executar um programa
 -- recebe uma memória e devolve uma memória
 executar :: ListMememoria -> ListMememoria
+executar mem = 
+
 -- ler o arquivo e devolver a lista
 -- ciclo busca, decodifica e executa
 -- faz até encontrar o NOP
@@ -64,7 +66,8 @@ execSTO :: Int -> (ListMememoria, Int, Int) -> (ListMemoria, Int, Int)
 execSTO end (mem, acc, eqz) = (atualizaMemoria end acc mem, acc, eqz)
 
 -- Instrução JMP
-
+execJMP Int -> (ListMememoria, Int, Int) -> (ListMemoria, Int, Int)
+execJMP end (mem, acc, eqz) = 
 -- instrução JMZ
 
 -- Instrução ADD
