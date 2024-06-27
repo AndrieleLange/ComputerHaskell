@@ -69,6 +69,7 @@ execNOP cpu = cpu
 execHLT :: CPU -> CPU
 execHLT cpu = cpu { pc = -1 } -- Usamos -1 para indicar que o programa parou
 
+
 -- Executar um programa
 executar :: CPU -> CPU
 executar cpu
