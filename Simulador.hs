@@ -66,29 +66,35 @@ execNOP cpu = cpu
 execHLT :: CPU -> CPU
 execHLT cpu = cpu { pc = -1 } -- Usamos -1 para indicar que o programa parou
 
--- Executar um programa
-executar :: CPU -> CPU
+-- Executar um cpu recursivamente
+executar :: CPU -> IO CPU
 executar cpu
-    | pc cpu < 0 = cpu -- Se pc for -1, o programa parou
-    | otherwise =
-        let instr = readMem (memoria cpu) (pc cpu)
-            end = readMem (memoria cpu) (pc cpu + 1)
-            mostrarMemoriaFinal cpu = do
-                putStrLn "Estado final da memória:"
-                mapM_ (\(end, val) -> putStrLn $ "Endereço " ++ show end ++ ": " ++ show val) (memoria cpu)
-            newCPU = case instr of
-                2  -> execLOD end cpu
-                4  -> execSTO end cpu
-                6  -> execJMP end cpu
-                8  -> execJMZ end cpu
-                10 -> execCPE end cpu
-                14 -> execADD end cpu
-                16 -> execSUB end cpu
-                18 -> execNOP cpu
-                20 -> execHLT cpu
-                _  -> cpu -- Instrução desconhecida, não faz nada
-        in newCPU { pc = pc newCPU + 2 }
-       
+    | pc cpu == -1 = return cpu
+    | otherwise    = do
+        let pcAtual = pc cpu
+        putStrLn $ "Executando instrução na posição " ++ show pcAtual
+        let newCPU = executarInstrucao cpu
+        putStrLn $ "Estado da CPU após a instrução: " ++ show newCPU
+        executar newCPU
+
+-- Executar uma instrução
+-- Executar uma instrução
+executarInstrucao :: CPU -> CPU
+executarInstrucao cpu =
+    let pcAtual = pc cpu
+        instrucao = readMem (memoria cpu) pcAtual
+    in case instrucao of
+        2  -> execLOD (pcAtual + 1) cpu { pc = pcAtual + 2 }
+        4  -> execSTO (pcAtual + 1) cpu { pc = pcAtual + 2 }
+        6  -> execJMP (pcAtual + 1) cpu { pc = pcAtual + 2 }
+        8  -> execJMZ (pcAtual + 1) cpu { pc = pcAtual + 2 }
+        10 -> execCPE (pcAtual + 1) cpu { pc = pcAtual + 2 }
+        14 -> execADD (pcAtual + 1) cpu { pc = pcAtual + 2 }
+        16 -> execSUB (pcAtual + 1) cpu { pc = pcAtual + 2 }
+        18 -> execNOP cpu { pc = pcAtual + 1 }
+        20 -> execHLT cpu { pc = pcAtual + 1 }
+        _  -> cpu { pc = pcAtual + 1 } -- Instrução desconhecida, não faz nada
+
 
 -- Leitura da memória de um arquivo
 carregaMemoria :: FilePath -> IO ListMemoria
@@ -102,10 +108,9 @@ mostrarMemoriaFinal cpu = do
     putStrLn "Estado final da memória:"
     mapM_ (\(end, val) -> putStrLn $ "Endereço " ++ show end ++ ": " ++ show val) (memoria cpu)
 
-
 main :: IO ()
 main = do
-    memoria <- carregaMemoria "sub.txt"
+    memoria <- carregaMemoria "programa.txt"
     let cpu = criaCPU 0 0 memoria
-    let cpuFinal = executar cpu
+    cpuFinal <- executar cpu
     mostrarMemoriaFinal cpuFinal
