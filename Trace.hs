@@ -1,3 +1,6 @@
+import System.IO
+import Debug.Trace
+
 type ListMemoria = [(Int, Int)] -- lista de memorias
 
 data CPU = CPU { acc :: Int, pc :: Int, memoria :: ListMemoria, eqz :: Bool } deriving (Show)
@@ -66,6 +69,7 @@ execNOP cpu = cpu
 execHLT :: CPU -> CPU
 execHLT cpu = cpu { pc = -1 } -- Usamos -1 para indicar que o programa parou
 
+
 -- Executar um programa
 executar :: CPU -> CPU
 executar cpu
@@ -73,9 +77,6 @@ executar cpu
     | otherwise =
         let instr = readMem (memoria cpu) (pc cpu)
             end = readMem (memoria cpu) (pc cpu + 1)
-            mostrarMemoriaFinal cpu = do
-                putStrLn "Estado final da memória:"
-                mapM_ (\(end, val) -> putStrLn $ "Endereço " ++ show end ++ ": " ++ show val) (memoria cpu)
             newCPU = case instr of
                 2  -> execLOD end cpu
                 4  -> execSTO end cpu
@@ -87,8 +88,10 @@ executar cpu
                 18 -> execNOP cpu
                 20 -> execHLT cpu
                 _  -> cpu -- Instrução desconhecida, não faz nada
-        in newCPU { pc = pc newCPU + 2 }
-       
+        in traceCPU newCPU { pc = pc newCPU + 2 }
+  where
+    traceCPU cpu = cpu { memoria = trace (showCPU cpu) (memoria cpu) }
+    showCPU cpu = "CPU { acc: " ++ show (acc cpu) ++ ", pc: " ++ show (pc cpu) ++ ", eqz: " ++ show (eqz cpu) ++ " }"
 
 -- Leitura da memória de um arquivo
 carregaMemoria :: FilePath -> IO ListMemoria
@@ -96,16 +99,9 @@ carregaMemoria caminho = do
     conteudo <- readFile caminho
     return (map (\linha -> let [end, val] = map read (words linha) in (end, val)) (lines conteudo))
 
--- Função para mostrar o estado final da memória
-mostrarMemoriaFinal :: CPU -> IO ()
-mostrarMemoriaFinal cpu = do
-    putStrLn "Estado final da memória:"
-    mapM_ (\(end, val) -> putStrLn $ "Endereço " ++ show end ++ ": " ++ show val) (memoria cpu)
-
-
 main :: IO ()
 main = do
     memoria <- carregaMemoria "sub.txt"
     let cpu = criaCPU 0 0 memoria
     let cpuFinal = executar cpu
-    mostrarMemoriaFinal cpuFinal
+    print cpuFinal
