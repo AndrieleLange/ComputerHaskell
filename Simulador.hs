@@ -110,7 +110,7 @@ mostrarMemoriaFinal cpu = do
 
 main :: IO ()
 main = do
-    memoria <- carregaMemoria "programa.txt"
+    memoria <- carregaMemoria "somaTeste.txt"
     let cpu = criaCPU 0 0 memoria
     cpuFinal <- executar cpu
     mostrarMemoriaFinal cpuFinal
