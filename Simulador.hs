@@ -78,23 +78,22 @@ executar cpu
         executar newCPU
 
 -- Executar uma instrução
--- Executar uma instrução
 executarInstrucao :: CPU -> CPU
 executarInstrucao cpu =
     let pcAtual = pc cpu
         instrucao = readMem (memoria cpu) pcAtual
+        parametro = readMem (memoria cpu) (pcAtual + 1)
     in case instrucao of
-        2  -> execLOD (pcAtual + 1) cpu { pc = pcAtual + 2 }
-        4  -> execSTO (pcAtual + 1) cpu { pc = pcAtual + 2 }
-        6  -> execJMP (pcAtual + 1) cpu { pc = pcAtual + 2 }
-        8  -> execJMZ (pcAtual + 1) cpu { pc = pcAtual + 2 }
-        10 -> execCPE (pcAtual + 1) cpu { pc = pcAtual + 2 }
-        14 -> execADD (pcAtual + 1) cpu { pc = pcAtual + 2 }
-        16 -> execSUB (pcAtual + 1) cpu { pc = pcAtual + 2 }
+        2  -> execLOD parametro cpu { pc = pcAtual + 2 }
+        4  -> execSTO parametro cpu { pc = pcAtual + 2 }
+        6  -> execJMP parametro cpu { pc = pcAtual + 2 }
+        8  -> execJMZ parametro cpu { pc = pcAtual + 2 }
+        10 -> execCPE parametro cpu { pc = pcAtual + 2 }
+        14 -> execADD parametro cpu { pc = pcAtual + 2 }
+        16 -> execSUB parametro cpu { pc = pcAtual + 2 }
         18 -> execNOP cpu { pc = pcAtual + 1 }
         20 -> execHLT cpu { pc = pcAtual + 1 }
         _  -> cpu { pc = pcAtual + 1 } -- Instrução desconhecida, não faz nada
-
 
 -- Leitura da memória de um arquivo
 carregaMemoria :: FilePath -> IO ListMemoria
